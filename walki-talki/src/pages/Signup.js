@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from "react";
 //import { userState } from "../Recoil/atoms/atom";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/WORKiTALKi.png";
-import mainlogo from "../assets/logo.png";
 
 const Nickname = styled.input`
   &::placeholder {
@@ -97,13 +96,13 @@ const Profile = styled.button`
   }
 `;
 const ImgPreview = styled.img`
-  width: 5vw;
+  width: 7.5vw;
   height: 7.5vw;
   border-radius: 5px;
   justify-content: center;
   align-items: center;
 `;
-function Login() {
+function Signup() {
   const imageInput = useRef();
 
   const onCickImageUpload = () => {
@@ -150,8 +149,8 @@ function Login() {
   const fileInput = useRef(null);
   const [error, setErrMsg] = useState("");
   const navigate = useNavigate();
-  const goSignup = () => {
-    navigate("/signup");
+  const goLogin = () => {
+    navigate("/login");
   };
   //const [user, setUser] = useRecoilState(userState);
   //const navigate = useNavigate();
@@ -228,13 +227,21 @@ function Login() {
           <img src={logo} />
         </div>
         <div style={{ margin: "20px 0 20px 0" }}>
-          <ImgPreview src={mainlogo} />
+          <ImgPreview src={img.preview_URL} />
         </div>
-        
+        <div>
+          <input
+            ref={imageInput}
+            type="file"
+            style={{ display: "none" }}
+            accept="image/jpg,impge/png,image/jpeg"
+            name="profile_img"
+            onChange={getImg}
+          />
 
           <div>
-<p>환영합니다!</p>
-<div>
+            <Nickname placeholder="nickname" />
+            <Profile onClick={onCickImageUpload}>프로필 사진 설정하기</Profile>
           </div>
         </div>
         <Form>
@@ -252,14 +259,12 @@ function Login() {
               //   })}
             />
           </InputContainer>
-          <InputContainer>
-            <SubmitBtn>로그인</SubmitBtn>
-          </InputContainer>
-          <SubmitBtn onClick={goSignup}>회원가입</SubmitBtn>
+
+          <SubmitBtn onClick={goLogin}>회원가입</SubmitBtn>
         </Form>
       </Container>
     </MainContainer>
   );
 }
 
-export default Login;
+export default Signup;
