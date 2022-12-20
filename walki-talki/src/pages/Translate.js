@@ -4,6 +4,10 @@ import talk from "../assets/talk.png";
 import kiki from "../assets/kiki.png";
 import dashboard from "../assets/dashboard.png";
 import setting from "../assets/setting.png";
+import { useState, useEffect, useRef } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const MainContainer = styled.div`
   display: flex;
   position: absolute;
@@ -79,8 +83,29 @@ border-radius: 1.5vw;
 &:hover{
     background-color: pink;
 }
-`
+`;
+
+
 const Translate = () => {
+  const [chat,setChat] = useState("");
+  const [result, setResult ] = useState("");
+  const onChange=(e)=>{
+    setChat(e.target.value);
+  }
+  const onSubmit = (e) =>{
+    axios.post("http://gabozago.shop/translation",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials:true,
+      data:{
+      chat:chat}
+    }).then((res)=>setResult(res.body))
+   
+
+  }
+  
   return (
     <MainContainer>
       <MainLeftWrapper>
@@ -102,11 +127,11 @@ const Translate = () => {
       </MainLeftWrapper>
       <MainCenterWrapper>
         <Title>키키번역</Title>
-        <Write placeholder="어떤 용어든 쉽게 번역해드립니다!">
+        <Write placeholder="어떤 용어든 쉽게 번역해드립니다!" onChange={onChange}>
 
         </Write>
-        <ChangeBtn>번역</ChangeBtn>
-        <Trans></Trans>
+        <ChangeBtn onClick = {onSubmit}>번역</ChangeBtn>
+        <Trans>{result}</Trans>
       </MainCenterWrapper>
     </MainContainer>
   );

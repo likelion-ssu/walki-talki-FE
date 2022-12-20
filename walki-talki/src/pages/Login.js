@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/WORKiTALKi.png";
 import mainlogo from "../assets/logo.png";
-
+import slogan from "../assets/slogan.png";
 const Nickname = styled.input`
   &::placeholder {
     color: black;
@@ -230,12 +230,10 @@ function Login() {
         <div style={{ margin: "20px 0 20px 0" }}>
           <ImgPreview src={mainlogo} />
         </div>
-        
 
-          <div>
-<p>환영합니다!</p>
-<div>
-          </div>
+        <div>
+          <ImgPreview src={slogan} style={{width:'27vw', height:'3vw'}} />
+          
         </div>
         <Form>
           <InputContainer>

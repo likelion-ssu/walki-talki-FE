@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 //import { userState } from "../Recoil/atoms/atom";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/WORKiTALKi.png";
-
+import axios from "axios";
 const Nickname = styled.input`
   &::placeholder {
     color: black;
@@ -55,6 +55,14 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
+  width: 25vw;
+  height: 3vw;
+  padding: 0 8px;
+  background-color: #f9f8f8;
+  border-radius: 3px;
+  border: none;
+`;
+const Input2 = styled.input`
   width: 25vw;
   height: 3vw;
   padding: 0 8px;
@@ -113,25 +121,6 @@ function Signup() {
     preview_URL:
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
   });
-  const [inputs, setInputs] = useState({
-    name: "",
-  });
-  const nameInput = useRef(null);
-
-  const name = inputs;
-
-  const onChange = (e) => {
-    const value = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    setInputs({
-      name: value,
-    });
-  };
-  const onReset = () => {
-    setInputs({
-      name: "",
-    });
-    nameInput.current.focus();
-  };
 
   const getImg = (event) => {
     event.preventDefault();
@@ -147,77 +136,49 @@ function Signup() {
     };
   };
   const fileInput = useRef(null);
-  const [error, setErrMsg] = useState("");
-  const navigate = useNavigate();
-  const goLogin = () => {
-    navigate("/login");
-  };
-  //const [user, setUser] = useRecoilState(userState);
-  //const navigate = useNavigate();
-  //const location = useLocation();
-  //const from = location.state?.from?.pathname || "/";
-  //   const {
-  //     register,
-  //     formState: { errors },
-  //     handleSubmit,
-  //     setFocus,
-  //   } = useForm({
-  //     mode: "onChange",
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  //   const [inputs, setInput] = useState({
+  //     email: "",
+  //     password: "",
+  //     nickname: "",
   //   });
+  const onEmailHandler = (e) => {
+    setEmail(e.target.value);
+  };
+  const onPasswordHandler = (e) => {
+    setPassword(e.target.value);
+  };
+  const onNicknameHandler = (e) => {
+    setNickname(e.target.value);
+  };
+  //   const { email, password, nickname } = inputs;
+  //   const onChange = (e) => {
+  //     const { value, name } = e.target;
+  //     setInput({
+  //       ...inputs,
+  //       [name]: value,
+  //     });
+  //     console.log(value)
+  //   };
 
-  //   useEffect(() => {
-  //     setFocus("email");
-  //   }, [setFocus]);
+  console.log(email, nickname, password);
+  const Sign = (e) => {
+    const navigate = useNavigate();
+    axios.post("http://gabozago.shop/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data:{
+      email: email,
+      password: password,
+      nickname: nickname,
+      }
+    });
 
-  const onLogin = async (data) => {
-    // try {
-    //   axios
-    //     .post("/user/login", {
-    //       headers: {
-    //         "Content-Type": "application/json"
-    //       },
-    //       email: data.email,
-    //       password: data.password,
-    //     })
-    //     .then((res) => {
-    //       if (res.status === 200) {
-    //         console.log(res)
-    //         setUser(res.data.data);
-    //       }
-    //     }).then(()=>{
-    //       navigate(from, { replace: true });
-    //     });
-    // } catch (err) {
-    //   console.log(err);
-    //   if (!err?.response) {
-    //     setErrMsg("서버로부터 응답이 없습니다");
-    //   } else if (err.response?.status === 400) {
-    //     setErrMsg("이메일 또는 패스워드를 확인해주세요");
-    //     console.log(error);
-    //   } else if (err.response?.status === 401) {
-    //     setErrMsg("허가되지않은 접근입니다");
-    //   } else {
-    //     setErrMsg("Login Failed");
-    //   }
-    // }
-    //     fetch("http://3.39.24.209:80/user/login", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         email: data.email,
-    //         password: data.password,
-    //       }),
-    //     })
-    //       .then((response) => response.json())
-    //       .then((data) => {
-    //         console.log(data);
-    //         setUser({ data });
-    //       })
-    //       .then(() => {
-    //         navigate(from, { replace: true });
-    //       });
+    console.log(email, nickname, password);
   };
 
   return (
@@ -240,27 +201,37 @@ function Signup() {
           />
 
           <div>
-            <Nickname placeholder="nickname" />
+            <Nickname
+              type="text"
+              placeholder="nickname"
+              id="nickname"
+              value={nickname}
+              onChange={onNicknameHandler}
+            />
             <Profile onClick={onCickImageUpload}>프로필 사진 설정하기</Profile>
           </div>
         </div>
         <Form>
           <InputContainer>
-            <Input type={"email"} id="Email" placeholder="please enter ur ID" />
-          </InputContainer>
-          <InputContainer>
             <Input
-              type={"password"}
-              id="password"
-              placeholder="please enter ur PW"
-              //   {...register("password", {
-              //     required: true,
-              //     minLength: 8,
-              //   })}
+              type="text"
+              value={email}
+              id="email"
+              placeholder="please enter ur ID"
+              onChange={onEmailHandler}
             />
           </InputContainer>
-
-          <SubmitBtn onClick={goLogin}>회원가입</SubmitBtn>
+          <InputContainer>
+            <Input2
+              type="text"
+              value={password}
+              id="password"
+              placeholder="please enter ur PW"
+              onChange={onPasswordHandler}
+            />
+          </InputContainer>
+        
+        <SubmitBtn onClick={Sign}>회원가입</SubmitBtn>
         </Form>
       </Container>
     </MainContainer>
